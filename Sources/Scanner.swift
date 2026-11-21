@@ -83,8 +83,9 @@ enum AppScanner {
         let version = (info?["CFBundleShortVersionString"] as? String)
             ?? (info?["CFBundleVersion"] as? String)
             ?? ""
-        let isSystem = url.path.hasPrefix("/System/")
-            || (bundleID?.hasPrefix("com.apple.") ?? false)
+        // 系统 App 的判定依据是「是否受 SIP 保护」，而不是 Bundle ID 前缀：
+        // Apple 自家但可再下载的 App（Xcode、Final Cut、iWork 等）在 /Applications 下，通常可以卸载。
+        let isSystem = isSIPProtected(url)
         let modified = (try? url.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate
         let size = directorySize(url)
 
@@ -100,6 +101,20 @@ enum AppScanner {
                             modified: modified,
                             embeddedIDs: embeddedBundleIDs(in: url),
                             appGroups: signing.groups)
+    }
+
+    /// 是否位于受 SIP 保护的系统卷，或带 restricted 标记（Safari 这类指向系统卷的符号链接也算）
+    static func isSIPProtected(_ url: URL) -> Bool {
+        let resolved = url.resolvingSymlinksInPath()
+        if url.path.hasPrefix("/System/") || resolved.path.hasPrefix("/System/") { return true }
+        return hasRestrictedFlag(url.path) || hasRestrictedFlag(resolved.path)
+    }
+
+    static func hasRestrictedFlag(_ path: String) -> Bool {
+        var info = stat()
+        guard lstat(path, &info) == 0 else { return false }
+        // UF_RESTRICTED = 0x00080000，SIP 用它标记不可修改的系统内容
+        return (info.st_flags & UInt32(0x00080000)) != 0
     }
 
     /// 递归统计目录体积（按磁盘实际占用）

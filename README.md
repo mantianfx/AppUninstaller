@@ -160,9 +160,11 @@ $BIN --render-ui out.png --sheet confirm|report|orphans   # 生成界面截图�
 </details>
 
 <details>
-<summary><b>为什么有些 App 不能勾选？</b></summary>
+<summary><b>系统 App 能删吗？</b></summary>
 
-`/System` 下或 `com.apple.*` 的系统 App 受 SIP 保护，无法删除，因此只展示不可选。
+不能。`/System` 下以及受 SIP 保护（带 `restricted` 标记 / 指向密封系统卷）的 App，连 root 也无法删除；强行关闭 SIP 修改系统卷会破坏签名，系统更新也会还原，不建议。
+
+例外：Apple 自家但可重新下载的 App（Xcode、Final Cut Pro Creator Studio、iWork 等）位于 `/Applications`，通常不受 SIP 保护，可以正常卸载。本工具按「是否受 SIP 保护」判断，而不是 Bundle ID 前缀。
 </details>
 
 <details>
@@ -191,7 +193,7 @@ $BIN --render-ui out.png --sheet confirm|report|orphans   # 生成界面截图�
 
 其他限制：
 
-- 受 SIP 保护的系统组件无法删除。
+- 受 SIP 保护的系统 App 无法删除（`/System` 下或带 `restricted` 标记）；`/Applications` 下 Apple 自家可再下载的 App 可以卸载。
 - 带系统扩展 / 网络扩展 / 守护进程的 App（VPN、杀毒等），卸载后建议重启一次。
 - 删除后 Dock 上可能短暂残留图标，注销或拖出即可。
 - 存档在容器内的用户数据（聊天记录、文档等）删除后不可恢复，操作前请备份。
@@ -239,6 +241,9 @@ Resources/AppIcon.icns ───────┘
 
 ## 更新日志
 
+- **1.2.3**
+  - 系统 App 判定改为按 SIP 保护状态（路径 / `restricted` 标记），不再一律按 `com.apple.*` 锁定；Final Cut Pro Creator Studio 这类 Apple 应用现在可以正常卸载
+  - Safari 等指向密封系统卷的符号链接仍视为系统 App
 - **1.2.2**
   - 右下角显示当前版本号（悬停可见 build 号）
 - **1.2.1**
