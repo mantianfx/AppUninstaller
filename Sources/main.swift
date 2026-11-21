@@ -93,6 +93,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         FullDiskAccess.openSettings()
     }
 
+    @objc private func menuOrphans() {
+        state.openOrphanSheet()
+    }
+
     @objc private func menuUninstall() {
         state.beginUninstall()
     }
@@ -147,6 +151,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let uninstallItem = actionMenu.addItem(withTitle: "卸载所选…", action: #selector(menuUninstall), keyEquivalent: "\u{8}")
         uninstallItem.keyEquivalentModifierMask = [.command, .shift]
         uninstallItem.target = self
+
+        let orphanItem = actionMenu.addItem(withTitle: "残留清理…", action: #selector(menuOrphans), keyEquivalent: "o")
+        orphanItem.keyEquivalentModifierMask = [.command, .shift]
+        orphanItem.target = self
 
         let windowMenuItem = NSMenuItem()
         mainMenu.addItem(windowMenuItem)

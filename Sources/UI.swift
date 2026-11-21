@@ -109,10 +109,10 @@ struct HeaderBar: View {
             Button {
                 state.openOrphanSheet()
             } label: {
-                Image(systemName: "broom")
+                Image(systemName: "trash.slash")
             }
             .buttonStyle(.borderless)
-            .help("清理已卸载 App 的残留容器")
+            .help("残留清理：扫描并清理已卸载 App 留下的容器")
             .disabled(state.isScanning)
 
             Button {
@@ -580,6 +580,15 @@ struct FooterBar: View {
 
             Spacer()
 
+            Button {
+                state.openOrphanSheet()
+            } label: {
+                Label("残留清理", systemImage: "trash.slash")
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+            .help("扫描已卸载 App 留下的容器残留")
+
             Button("全不选") { state.clearSelection() }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
@@ -734,7 +743,7 @@ struct OrphanSheet: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
-                Image(systemName: "broom")
+                Image(systemName: "trash.slash")
                     .font(.system(size: 16))
                     .foregroundStyle(.orange)
                 Text("残留清理").font(.system(size: 16, weight: .semibold))
