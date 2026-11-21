@@ -606,6 +606,12 @@ struct FooterBar: View {
             .buttonStyle(DangerButtonStyle(large: true))
             .disabled(state.selection.isEmpty || state.isUninstalling)
             .opacity(state.selection.isEmpty ? 0.45 : 1)
+
+            Text("v\(AppInfo.version)")
+                .font(.system(size: 9.5).monospacedDigit())
+                .foregroundStyle(.tertiary)
+                .padding(.leading, 2)
+                .help("应用卸载器 \(AppInfo.version) (build \(AppInfo.build))")
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)

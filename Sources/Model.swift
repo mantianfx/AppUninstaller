@@ -156,6 +156,17 @@ struct UninstallReport: Identifiable {
     var hint: String? = nil
 }
 
+// MARK: - 版本
+
+enum AppInfo {
+    static var version: String {
+        (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "dev"
+    }
+    static var build: String {
+        (Bundle.main.infoDictionary?["CFBundleVersion"] as? String) ?? "-"
+    }
+}
+
 // MARK: - 工具
 
 func formatBytes(_ bytes: Int64) -> String {
