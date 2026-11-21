@@ -46,7 +46,6 @@ xattr -dr com.apple.quarantine "/Applications/应用卸载器.app"
 ```bash
 git clone https://github.com/mantianfx/AppUninstaller.git
 cd AppUninstaller
-cd AppUninstaller
 
 ./build.sh          # 编译 + 打包 + ad-hoc 签名 → dist/应用卸载器.app
 ./install.command   # 安装到 /Applications 并打开（也可用 ./install.sh）
